@@ -8,7 +8,7 @@
 typedef struct noeud* nd;
 struct noeud{
     nd gauche;
-    int *valeur;
+    int *valeur; //TODO generique
     nd droite;
 };
 
@@ -24,6 +24,7 @@ arbre creer_arbre(){
 }
 
 void switch_val(){
+    //TODO
 }
 
 int estVide (arbre a){
@@ -44,9 +45,8 @@ nd creer_noeud(void* _val, void(* _copier)(void*, void**)) {
 
 
 
-void add_nod(arbre a , nd nod ,int(compare)(void*,void*)){
+void add_noeud(arbre a, nd nod, int(compare)(void *, void *)){
     nd it=a->tete;
-    int done=0;
     if(estVide(a)){
        a->tete=nod;
     }else{
@@ -140,8 +140,10 @@ void supprimer (arbre a , void* n){
 }
 
 */
-void liberer(void** val){
-    free(*val);
+void _liberer_noeud(nd *val){
+    free((*(val))->droite);
+    free((*(val))->gauche);
+    free((*(val))->valeur);
     *val=NULL;
 }
 
@@ -165,9 +167,10 @@ int main() {
     nd nd2= creer_noeud(&b,&_copier_int);
     printf("%d", *nd1->valeur);
     arbre arbre1 = creer_arbre();
-    add_nod(arbre1,nd1,compare);
+    add_noeud(arbre1, nd1, compare);
     printf("%d\n",*(arbre1->tete->valeur));
-    add_nod(arbre1,nd2,compare);
+    add_noeud(arbre1, nd2, compare);
+    _liberer_noeud(nd2);
     printf("%d\n",*(arbre1->tete->droite->valeur));
     printf("%d\n",compare(nd1,nd2));
     return 0;
