@@ -55,7 +55,8 @@ void add_nod(arbre a , nd nod ,int(compare)(void*,void*)){
             int i = compare(it,nod);
             printf("%d",i);
              if(i>0){//C'est plus grand
-                if(it->gauche==NULL){
+                 printf("J'ai detecte que c'etais plus grand");
+                 if(it->gauche==NULL){
                         it->gauche=nod;
                     return;
                 }else{
@@ -65,8 +66,6 @@ void add_nod(arbre a , nd nod ,int(compare)(void*,void*)){
             if(i<0){//C'est plus petit
                 printf("J'ai detecte que c'etais plus petit");
                 if(it->droite==NULL){
-                    printf("ouiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
-
                     it->droite=nod;
                     return;
                 }else{
@@ -74,7 +73,7 @@ void add_nod(arbre a , nd nod ,int(compare)(void*,void*)){
                 }
             }
             if(i==0){//C'est egal
-                printf("dude what?");
+                printf("Ca y est deja, je ne fait rien");
                 return;
             }
         }
@@ -164,11 +163,12 @@ int main() {
     int b =3;
     nd nd1= creer_noeud(&a,&_copier_int);
     nd nd2= creer_noeud(&b,&_copier_int);
-    arbre arbre1 = creer_arbre();
-    //add_nod(arbre1,nd1,compare);
-    //add_nod(arbre1,nd2,compare);
     printf("%d", *nd1->valeur);
-    //printf("%d\n",*(arbre1->tete->valeur));
-    //printf("%d\n",compare(nd1,nd2));
+    arbre arbre1 = creer_arbre();
+    add_nod(arbre1,nd1,compare);
+    printf("%d\n",*(arbre1->tete->valeur));
+    add_nod(arbre1,nd2,compare);
+    printf("%d\n",*(arbre1->tete->droite->valeur));
+    printf("%d\n",compare(nd1,nd2));
     return 0;
 }
