@@ -1,5 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
+#include <time.h>
 
 
 typedef struct noeud* nd;
@@ -16,6 +19,7 @@ struct arbre{
 
 arbre creer_arbre(){
     arbre a = (arbre)malloc(sizeof(arbre));
+    a->tete=NULL;
     return a;
 }
 
@@ -25,6 +29,20 @@ void switch_val(){
 int estVide (arbre a){
     return a->tete==NULL;
 }
+void _copier_int(void* _val, void** ptr) {
+    *ptr = (int*)malloc(sizeof(int));
+    memcpy(*ptr,_val,sizeof(int));
+}
+
+nd creer_noeud(void* _val, void(* _copier)(void*, void**)) {
+    nd n = (nd)malloc(sizeof(struct noeud));
+    _copier(_val, &(n->valeur));
+    n->gauche = NULL;
+    n->droite = NULL;
+    return n;
+}
+
+
 
 void add_nod(arbre a , nd nod ,int(compare)(void*,void*)){
     nd it=a->tete;
@@ -32,24 +50,32 @@ void add_nod(arbre a , nd nod ,int(compare)(void*,void*)){
     if(estVide(a)){
        a->tete=nod;
     }else{
-        while(done==0){
-            if(compare(it,nod)==1){
+        while (1){
+            printf("J'essaye de rajouter %d \n", *(nod->valeur));
+            int i = compare(it,nod);
+            printf("%d",i);
+             if(i>0){//C'est plus grand
                 if(it->gauche==NULL){
                         it->gauche=nod;
-                        done=1;
+                    return;
                 }else{
                     it=it->gauche;
                 }
-            }if(compare(it,nod)==-1){
+            }
+            if(i<0){//C'est plus petit
+                printf("J'ai detecte que c'etais plus petit");
                 if(it->droite==NULL){
-                        it->droite=nod;
-                        done=1;
+                    printf("ouiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
+
+                    it->droite=nod;
+                    return;
                 }else{
                     it=it->droite;
                 }
-            }else{
-                printf("dude what");
-                done=1;//break??????????????????????????????????????????????
+            }
+            if(i==0){//C'est egal
+                printf("dude what?");
+                return;
             }
         }
     }
@@ -127,22 +153,22 @@ int compare(void* a , void* b){//Renvoie 1 si a>b, Renvoie -1 si a<b 0 sinon
 
     struct noeud ndb = *((nd)b);
     int valb = *ndb.valeur;
-
-    if(vala>valb)return 1;
-    if(vala<valb)return -1;
+    if(vala<valb)return 1;
+    if(vala>valb)return -1;
     return 0;
 }
 
 
 int main() {
-    nd nd1 = malloc(sizeof(nd));
-    nd nd2 = malloc(sizeof(nd));
-    int a = 2;
-    int b = 1;
-    nd1->valeur=&a;
-    nd2->valeur=&b;
-
-    printf("%d\n",compare(nd1,nd2));
-
+    int a =5;
+    int b =3;
+    nd nd1= creer_noeud(&a,&_copier_int);
+    nd nd2= creer_noeud(&b,&_copier_int);
+    arbre arbre1 = creer_arbre();
+    //add_nod(arbre1,nd1,compare);
+    //add_nod(arbre1,nd2,compare);
+    printf("%d", *nd1->valeur);
+    //printf("%d\n",*(arbre1->tete->valeur));
+    //printf("%d\n",compare(nd1,nd2));
     return 0;
 }
