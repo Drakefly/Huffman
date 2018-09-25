@@ -5,7 +5,7 @@
 typedef struct noeud* nd;
 struct noeud{
     nd gauche;
-    void* valeur;
+    int *valeur;
     nd droite;
 };
 
@@ -20,7 +20,6 @@ arbre creer_arbre(){
 }
 
 void switch_val(){
-
 }
 
 int estVide (arbre a){
@@ -41,8 +40,6 @@ void add_nod(arbre a , nd nod ,int(compare)(void*,void*)){
                 }else{
                     it=it->gauche;
                 }
-
-
             }if(compare(it,nod)==-1){
                 if(it->droite==NULL){
                         it->droite=nod;
@@ -54,14 +51,10 @@ void add_nod(arbre a , nd nod ,int(compare)(void*,void*)){
                 printf("dude what");
                 done=1;//break??????????????????????????????????????????????
             }
-
         }
     }
-
-
-
 }
-
+/**
 void supprimer (arbre a , void* n){
     if(a->tete!=NULL){
         int done =0;
@@ -120,21 +113,36 @@ void supprimer (arbre a , void* n){
 
     }
 }
+
+*/
 void liberer(void** val){
     free(*val);
     *val=NULL;
 }
 
-int compare(void* a , void* b){
-    if(a->valeur>b->valeur)return 1;
-    if(a->valeur<b->valeur)return -1;
-    if(a->valeur==b->valeur)return 0;
+int compare(void* a , void* b){//Renvoie 1 si a>b, Renvoie -1 si a<b 0 sinon
+    //TODO les free
+    struct noeud nda = *((nd)a);
+    int vala = *nda.valeur;
+
+    struct noeud ndb = *((nd)b);
+    int valb = *ndb.valeur;
+
+    if(vala>valb)return 1;
+    if(vala<valb)return -1;
+    return 0;
 }
 
 
-int main()
-{
+int main() {
+    nd nd1 = malloc(sizeof(nd));
+    nd nd2 = malloc(sizeof(nd));
+    int a = 2;
+    int b = 1;
+    nd1->valeur=&a;
+    nd2->valeur=&b;
 
-    printf("Hello world!\n");
+    printf("%d\n",compare(nd1,nd2));
+
     return 0;
 }
