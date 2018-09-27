@@ -17,25 +17,48 @@ struct arbre{
     nd tete;
 };
 
+typedef struct doublon * doublon;
+struct doublon{
+   char c;
+   int occurance;
+};
+
 void _liberer_noeud(nd *val){
     free((*(val))->droite);
     free((*(val))->gauche);
     free((*(val))->valeur);
     *val=NULL;
 }
+
 arbre creer_arbre(){
     arbre a = (arbre)malloc(sizeof(arbre));
     a->tete=NULL;
     return a;
 }
 
-int estVide (arbre a){
+int est_vide(arbre a){
     return a->tete==NULL;
 }
 
 void _copier_int(void* _val, void** ptr) {
     *ptr = (int*)malloc(sizeof(int));
     memcpy(*ptr,_val,sizeof(int));
+}
+
+void _copier_doublons(void* _val, void** ptr){
+    *ptr = (doublon )malloc(sizeof(doublon));
+    memcpy(*ptr,_val,sizeof(doublon));
+}
+
+doublon creer_doublon(char c){
+    doublon d = malloc(sizeof(doublon));
+    d->c=c;
+    d->occurance=1;
+    return d;
+}
+
+void incrementer_doublon(doublon *doublon1){
+    (*doublon1)->occurance++;
 }
 
 nd creer_noeud(void* _val, void(* _copier)(void*, void**)) {
@@ -48,7 +71,7 @@ nd creer_noeud(void* _val, void(* _copier)(void*, void**)) {
 
 void add_noeud(arbre a, nd nod, int(compare)(void *, void *)){
     nd it=a->tete;
-    if(estVide(a)){
+    if(est_vide(a)){
        a->tete=nod;
     }else{
         while (1){
@@ -139,7 +162,6 @@ void supprimer (arbre a , void* n){
 
 */
 
-
 int compare(void* a , void* b){//Renvoie 1 si a>b, Renvoie -1 si a<b 0 sinon
     //TODO les free
     struct noeud nda = *((nd)a);
@@ -151,7 +173,6 @@ int compare(void* a , void* b){//Renvoie 1 si a>b, Renvoie -1 si a<b 0 sinon
     if(vala>valb)return -1;
     return 0;
 }
-
 /*void supprimer (arbre a , void* n) {
 
     printf("coucou batard ici c'est le supprimer");
